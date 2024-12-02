@@ -39,7 +39,8 @@ class ImageGeneratorApp:
         self.format_label = ttk.Label(self.image_tab, text="Format:")
         self.format_label.grid(row=2, column=0, padx=5, pady=5)
 
-        self.format_combobox = ttk.Combobox(self.image_tab, values=["jpg", "jpeg", "png"])
+        # Make the combobox read-only to restrict input to dropdown options only
+        self.format_combobox = ttk.Combobox(self.image_tab, values=["jpg", "jpeg", "png"], state="readonly")
         self.format_combobox.grid(row=2, column=1, padx=5, pady=5)
 
         self.generate_button = ttk.Button(self.image_tab, text="Generate Image", command=self.generate_image)
@@ -80,8 +81,12 @@ class ImageGeneratorApp:
             height = int(self.height_entry.get())
             file_format = self.format_combobox.get()
 
+            # Get current date and time
+            from datetime import datetime
+            current_time = datetime.now().strftime("%d.%m.%Y_%H:%M")
+
             # Call the function to generate the image
-            filename = f"{self.save_path}/{width}x{height}_{file_format}.png"
+            filename = f"{self.save_path}/{current_time}_{width}x{height}_{file_format}.png"
             generate_image(width, height, file_format, filename)
             self.show_message(f"Image generated and saved as {filename}")
 
@@ -100,6 +105,7 @@ class ImageGeneratorApp:
         # Disable the Text widget to prevent user editing
         self.error_text.config(state="disabled")
         self.error_text.yview(tk.END)  # Scroll to the bottom
+
 
 if __name__ == "__main__":
     root = tk.Tk()
